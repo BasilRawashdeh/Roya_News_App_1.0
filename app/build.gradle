@@ -31,6 +31,7 @@ android {
 
 dependencies {
 
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     def room_version = "2.3.0"
 
     implementation "androidx.room:room-runtime:$room_version"
@@ -50,6 +51,8 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.4.0-alpha04"
+
+    implementation 'com.squareup.picasso:picasso:2.5.0'
 
     //------------------------------------------------
     implementation "androidx.cardview:cardview:1.0.0"
