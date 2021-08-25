@@ -23,7 +23,8 @@
             android:background="@color/white"
             android:fontFamily="@font/g_bold"
             android:padding="10dp"
-            android:text="TOP HEADLINES !"
+            android:gravity="right"
+            android:text="@string/top_headlines"
             android:textColor="@color/black"
             android:textSize="20sp" />
 

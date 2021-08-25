@@ -3,34 +3,48 @@ package com.example.royanewsapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.royanewsapp.Model.NewsModel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     NewsViewModel newsViewModel;
+    private RequestQueue mQueue;
+    public static final String API_URL = "https://beta.royanews.tv/api/section/get/1/info/1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mQueue = Volley.newRequestQueue(this);
+       // jsonParse();
 
         SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefresh);
         RecyclerView newsRecyclerView = findViewById(R.id.newsRecyclerView);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         newsRecyclerView.setHasFixedSize(true);
 
-        final NewsAdapter newsAdapter = new NewsAdapter();
+        final NewsAdapter newsAdapter = new NewsAdapter(MainActivity.this);
         newsRecyclerView.setAdapter(newsAdapter);
 
         newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
@@ -38,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<NewsModel> newsModels) {
                 ///todo: update newsRecyclerView
-                Toast.makeText(getApplicationContext(), "MainActivity-onChanged", Toast.LENGTH_SHORT).show();
                 newsAdapter.setNews(newsModels);
             }
         });
@@ -47,10 +60,50 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 ///todo: retrieveJson
+                jsonParse();
             }
         });
 
     }
+
+    private void jsonParse() {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, API_URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("section_info");
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject newsJSONObject = jsonArray.getJSONObject(i);
+
+                                String newsTitle = newsJSONObject.getString("news_title");
+                                String newsImageLink = newsJSONObject.getString("imageLink");
+                                String newsSectionName = newsJSONObject.getString("section_name");
+
+                                Log.i("News Model"+i+":=", newsTitle);
+                                Log.i("News Model"+i+":=", newsSectionName);
+                                Log.i("News Model"+i+":=", newsImageLink);
+
+                                newsViewModel.insertNews(new NewsModel(newsImageLink, newsTitle, newsSectionName));
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        mQueue.add(request);
+    }
+
 /*
 
     private class JsonTask extends AsyncTask<String, String, String> {

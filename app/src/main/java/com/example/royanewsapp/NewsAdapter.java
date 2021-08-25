@@ -28,9 +28,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public NewsAdapter() {
     }
 
-    public NewsAdapter(Context context, List<NewsModel> newsModels) {
+    public NewsAdapter(Context context) {
         this.context = context;
-        this.newsModels = newsModels;
     }
 
     @NonNull
@@ -47,7 +46,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         newsViewHolder.newsTitle.setText(newsModel.getNewsTitle());
         newsViewHolder.newsSectionName.setText(newsModel.getNewsSectionName());
-        Picasso.with(context).load(newsModel.getNewsImage()).into(newsViewHolder.newsImageView);
+        Picasso.with(context).load(newsModel.getNewsImageLink()).into(newsViewHolder.newsImageView);
 
 
         newsViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +54,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             public void onClick(View v) {
                 Intent intent = new Intent(context, NewsDetailsActivity.class);
                 intent.putExtra("newsTitle",newsModel.getNewsTitle());
-                intent.putExtra("newsImageUrl",newsModel.getNewsImage());
+                intent.putExtra("newsImageUrl",newsModel.getNewsImageLink());
                 //intent.putExtra("time",dateTime(newsModel.getPublishedAt()));
                 //intent.putExtra("desc",newsModel.getDescription());
                 //intent.putExtra("url",newsModel.getUrl());

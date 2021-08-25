@@ -34,7 +34,7 @@ public class NewsModel {
         this.newsID = newsID;
     }
 
-    public String getNewsImage() {
+    public String getNewsImageLink() {
         return newsImage;
     }
 

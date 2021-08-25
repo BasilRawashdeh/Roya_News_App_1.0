@@ -29,9 +29,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         tvSource = findViewById(R.id.tvSource);
         tvTime = findViewById(R.id.tvDate);
         tvDesc = findViewById(R.id.tvDesc);
-
         imageView = findViewById(R.id.imageView);
-
         webView = findViewById(R.id.webView);
 
         loader = findViewById(R.id.webViewLoader);
