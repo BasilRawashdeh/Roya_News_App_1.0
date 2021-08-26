@@ -13,8 +13,6 @@
         app:cardElevation="4dp"
         app:cardCornerRadius="6dp">
 
-
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp">
@@ -27,12 +25,10 @@
                 android:id="@+id/loader"/>
 
             <ImageView
-                android:id="@+id/image"
+                android:id="@+id/ivNewsImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop" />
-
-
 
             <ImageView
                 android:layout_width="match_parent"
@@ -42,12 +38,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TITLE"
+                android:text="Title"
                 android:padding="10dp"
                 android:textSize="20dp"
                 android:fontFamily="@font/g_bold"
                 android:textColor="@color/white"
-                android:id="@+id/tvTitle"/>
+                android:id="@+id/tvNewsTitle"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,7 +59,7 @@
                     android:textSize="15dp"
                     android:fontFamily="@font/g_light"
                     android:textColor="@color/white"
-                    android:id="@+id/tvSource"/>
+                    android:id="@+id/tvNewsSectionName"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -73,7 +69,7 @@
                     android:textSize="15dp"
                     android:fontFamily="@font/g_light"
                     android:textColor="@color/white"
-                    android:id="@+id/tvDate"/>
+                    android:id="@+id/tvNewsDate"/>
             </LinearLayout>
         </FrameLayout>
 

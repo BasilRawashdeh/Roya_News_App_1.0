@@ -46,6 +46,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         newsViewHolder.newsTitle.setText(newsModel.getNewsTitle());
         newsViewHolder.newsSectionName.setText(newsModel.getNewsSectionName());
+        newsViewHolder.newsDate.setText(newsModel.getNewsCreatedDate());
         Picasso.with(context).load(newsModel.getNewsImageLink()).into(newsViewHolder.newsImageView);
 
 
@@ -53,11 +54,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, NewsDetailsActivity.class);
-                intent.putExtra("newsTitle",newsModel.getNewsTitle());
-                intent.putExtra("newsImageUrl",newsModel.getNewsImageLink());
-                //intent.putExtra("time",dateTime(newsModel.getPublishedAt()));
-                //intent.putExtra("desc",newsModel.getDescription());
-                //intent.putExtra("url",newsModel.getUrl());
+                intent.putExtra("news_title",newsModel.getNewsTitle());
+                intent.putExtra("imageLink",newsModel.getNewsImageLink());
+                intent.putExtra("createdDate", newsModel.getNewsCreatedDate());
+                intent.putExtra("section_name",newsModel.getNewsSectionName());
+                intent.putExtra("description",newsModel.getNewsDescription());
+                intent.putExtra("news_link",newsModel.getNewsLink());
                 context.startActivity(intent);
             }
         });
@@ -82,10 +84,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         public NewsViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            newsTitle = itemView.findViewById(R.id.tvTitle);
-            newsSectionName = itemView.findViewById(R.id.tvSource);
-            newsDate = itemView.findViewById(R.id.tvDate);
-            newsImageView = itemView.findViewById(R.id.image);
+            newsTitle = itemView.findViewById(R.id.tvNewsTitle);
+            newsSectionName = itemView.findViewById(R.id.tvNewsSectionName);
+            newsDate = itemView.findViewById(R.id.tvNewsDate);
+            newsImageView = itemView.findViewById(R.id.ivNewsImage);
             cardView = itemView.findViewById(R.id.cardView);
 
         }

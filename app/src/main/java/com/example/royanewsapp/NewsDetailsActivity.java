@@ -15,50 +15,50 @@ import com.squareup.picasso.Picasso;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
-    TextView tvTitle,tvSource,tvTime,tvDesc;
-    ImageView imageView;
+    TextView tvNewsTitle, tvNewsSectionName, tvNewsDate, tvNewsDescription;
+    ImageView ivNewsImage;
     WebView webView;
-    ProgressBar loader;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
-        tvTitle = findViewById(R.id.tvTitle);
-        tvSource = findViewById(R.id.tvSource);
-        tvTime = findViewById(R.id.tvDate);
-        tvDesc = findViewById(R.id.tvDesc);
-        imageView = findViewById(R.id.imageView);
+        tvNewsTitle = findViewById(R.id.tvNewsTitle);
+        tvNewsSectionName = findViewById(R.id.tvNewsSectionName);
+        tvNewsDate = findViewById(R.id.tvNewsDate);
+        tvNewsDescription = findViewById(R.id.tvDesc);
+        ivNewsImage = findViewById(R.id.imageView);
         webView = findViewById(R.id.webView);
-
-        loader = findViewById(R.id.webViewLoader);
-        loader.setVisibility(View.VISIBLE);
+        progressBar = findViewById(R.id.webViewLoader);
+        progressBar.setVisibility(View.VISIBLE);
+        //-------------------
 
         Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        String source = intent.getStringExtra("source");
-        String time = intent.getStringExtra("time");
-        String desc = intent.getStringExtra("desc");
-        String imageUrl = intent.getStringExtra("imageUrl");
-        String url = intent.getStringExtra("url");
+        String newsTitle = intent.getStringExtra("news_title");
+        String newsImageLink = intent.getStringExtra("imageLink");
+        String newsDate = intent.getStringExtra("createdDate");
+        String source = intent.getStringExtra("section_name");
+        String newsDesc = intent.getStringExtra("description");
+        String newsLink = intent.getStringExtra("news_link");
 
 
-        tvTitle.setText(title);
-        tvSource.setText(source);
-        tvTime.setText(time);
-        tvDesc.setText(desc);
+        tvNewsTitle.setText(newsTitle);
+        tvNewsSectionName.setText(source);
+        tvNewsDate.setText(newsDate);
+        tvNewsDescription.setText(newsDesc);
 
-        Picasso.with(NewsDetailsActivity.this).load(imageUrl).into(imageView);
+        Picasso.with(NewsDetailsActivity.this).load(newsImageLink).into(ivNewsImage);
 
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl(url);
+        webView.loadUrl(newsLink);
         if (webView.isShown()){
-            loader.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 }

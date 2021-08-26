@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,15 +33,16 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue mQueue;
     public static final String API_URL = "https://beta.royanews.tv/api/section/get/1/info/1";
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mQueue = Volley.newRequestQueue(this);
-       // jsonParse();
 
-        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout = findViewById(R.id.swipeRefresh);
         RecyclerView newsRecyclerView = findViewById(R.id.newsRecyclerView);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         newsRecyclerView.setHasFixedSize(true);
@@ -68,25 +71,33 @@ public class MainActivity extends AppCompatActivity {
 
     private void jsonParse() {
 
+        swipeRefreshLayout.setRefreshing(true);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, API_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray jsonArray = response.getJSONArray("section_info");
+                            swipeRefreshLayout.setRefreshing(false);
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject newsJSONObject = jsonArray.getJSONObject(i);
 
                                 String newsTitle = newsJSONObject.getString("news_title");
                                 String newsImageLink = newsJSONObject.getString("imageLink");
+                                String newsCreatedDate = newsJSONObject.getString("createdDate");
                                 String newsSectionName = newsJSONObject.getString("section_name");
+                                String newsDescription = newsJSONObject.getJSONObject("section").getString("description");
+                                String newsLink = newsJSONObject.getString("news_link");
 
                                 Log.i("News Model"+i+":=", newsTitle);
                                 Log.i("News Model"+i+":=", newsSectionName);
                                 Log.i("News Model"+i+":=", newsImageLink);
+                                Log.i("News Model"+i+":=", newsCreatedDate);
+                                Log.i("News Model"+i+":=", newsDescription);
+                                Log.i("News Model"+i+":=", newsLink);
 
-                                newsViewModel.insertNews(new NewsModel(newsImageLink, newsTitle, newsSectionName));
+                                newsViewModel.insertNews(new NewsModel(newsImageLink, newsTitle, newsSectionName, newsCreatedDate, newsLink, newsDescription));
 
                             }
                         } catch (JSONException e) {
@@ -97,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        swipeRefreshLayout.setRefreshing(false);
                         error.printStackTrace();
                     }
                 });
