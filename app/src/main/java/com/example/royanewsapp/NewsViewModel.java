@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.royanewsapp.Model.NewsModel;
 import com.example.royanewsapp.Model.NewsRepository;
 
 import org.jetbrains.annotations.NotNull;

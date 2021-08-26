@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.royanewsapp.Model.NewsModel;
+import com.example.royanewsapp.databinding.NewsItemBinding;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,6 +23,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     Context context;
     List<NewsModel> newsModels = new ArrayList<>();
+
+    NewsItemBinding newsItemBinding;
 
 
     public NewsAdapter() {
@@ -35,8 +37,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @NonNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View newsView = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
-        return new NewsViewHolder(newsView);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        NewsItemBinding newsItemBinding = NewsItemBinding.inflate(layoutInflater, parent,false);
+        return new NewsViewHolder(newsItemBinding);
     }
 
     @Override
@@ -44,12 +47,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         final NewsModel newsModel = newsModels.get(position);
 
-        newsViewHolder.newsTitle.setText(newsModel.getNewsTitle());
-        newsViewHolder.newsSectionName.setText(newsModel.getNewsSectionName());
-        newsViewHolder.newsDate.setText(newsModel.getNewsCreatedDate());
+        //bind newsModel to the variable "newsListItem" in the news_item.xml.
+        newsViewHolder.newsItemBinding.setNewsListItem(newsModel);
+
         Picasso.with(context).load(newsModel.getNewsImageLink()).into(newsViewHolder.newsImageView);
-
-
         newsViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,12 +82,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         ImageView newsImageView;
         CardView cardView;
 
-        public NewsViewHolder(@NonNull View itemView) {
-            super(itemView);
+        NewsItemBinding newsItemBinding;
 
+        public NewsViewHolder(@NonNull NewsItemBinding newsItemBinding) {
+            super(newsItemBinding.getRoot());
+
+            this.newsItemBinding = newsItemBinding;
+/*
             newsTitle = itemView.findViewById(R.id.tvNewsTitle);
             newsSectionName = itemView.findViewById(R.id.tvNewsSectionName);
             newsDate = itemView.findViewById(R.id.tvNewsDate);
+
+ */
             newsImageView = itemView.findViewById(R.id.ivNewsImage);
             cardView = itemView.findViewById(R.id.cardView);
 

@@ -9,6 +9,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.royanewsapp.NewsModel;
+
 import org.jetbrains.annotations.NotNull;
 
 @Database(entities = NewsModel.class, version = 1)

@@ -1,8 +1,13 @@
-package com.example.royanewsapp.Model;
+package com.example.royanewsapp;
 
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.squareup.picasso.Picasso;
 
 @Entity(tableName = "news_table")
 public class NewsModel {
@@ -99,4 +104,13 @@ public class NewsModel {
     public void setNewsSectionName(String newsSectionName) {
         this.newsSectionName = newsSectionName;
     }
+
+
+    /*@BindingAdapter("android:loadImage")
+    public static void loadImage(ImageView imageView, String imageUrl) {
+        Picasso.with(imageView.getContext()).load(imageUrl).into(imageView);
+    }
+
+     */
+
 }
