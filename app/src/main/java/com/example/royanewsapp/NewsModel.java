@@ -105,12 +105,10 @@ public class NewsModel {
         this.newsSectionName = newsSectionName;
     }
 
-
     /*@BindingAdapter("android:loadImage")
     public static void loadImage(ImageView imageView, String imageUrl) {
         Picasso.with(imageView.getContext()).load(imageUrl).into(imageView);
     }
 
      */
-
 }

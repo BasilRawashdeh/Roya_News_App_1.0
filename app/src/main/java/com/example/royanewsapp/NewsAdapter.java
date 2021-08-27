@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -23,9 +22,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     Context context;
     List<NewsModel> newsModels = new ArrayList<>();
-
-    NewsItemBinding newsItemBinding;
-
 
     public NewsAdapter() {
     }
@@ -73,12 +69,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     public void setNews(List<NewsModel> newsModels) {
+        newsModels.remove(0);
         this.newsModels = newsModels;
         notifyDataSetChanged();
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder {
-        TextView newsTitle, newsSectionName, newsDate;
         ImageView newsImageView;
         CardView cardView;
 
@@ -88,12 +84,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             super(newsItemBinding.getRoot());
 
             this.newsItemBinding = newsItemBinding;
-/*
-            newsTitle = itemView.findViewById(R.id.tvNewsTitle);
-            newsSectionName = itemView.findViewById(R.id.tvNewsSectionName);
-            newsDate = itemView.findViewById(R.id.tvNewsDate);
 
- */
             newsImageView = itemView.findViewById(R.id.ivNewsImage);
             cardView = itemView.findViewById(R.id.cardView);
 

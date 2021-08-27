@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Roya News App</string>
     <string name="top_headlines">ابرز العناوين !</string>
+    <string name="newsimageview">newsImageView</string>
 </resources>

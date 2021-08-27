@@ -10,44 +10,42 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
+import com.example.royanewsapp.databinding.ActivityNewsDetailsBinding;
+import com.example.royanewsapp.databinding.NewsItemBinding;
 import com.squareup.picasso.Picasso;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
-    TextView tvNewsTitle, tvNewsSectionName, tvNewsDate, tvNewsDescription;
     ImageView ivNewsImage;
     WebView webView;
     ProgressBar progressBar;
-
+    ActivityNewsDetailsBinding newsDetailsBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_details);
 
-        tvNewsTitle = findViewById(R.id.tvNewsTitle);
-        tvNewsSectionName = findViewById(R.id.tvNewsSectionName);
-        tvNewsDate = findViewById(R.id.tvNewsDate);
-        tvNewsDescription = findViewById(R.id.tvDesc);
+        newsDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_details);
+        setContentView(newsDetailsBinding.getRoot());
+
         ivNewsImage = findViewById(R.id.imageView);
         webView = findViewById(R.id.webView);
         progressBar = findViewById(R.id.webViewLoader);
         progressBar.setVisibility(View.VISIBLE);
         //-------------------
-
         Intent intent = getIntent();
         String newsTitle = intent.getStringExtra("news_title");
         String newsImageLink = intent.getStringExtra("imageLink");
-        String newsDate = intent.getStringExtra("createdDate");
-        String source = intent.getStringExtra("section_name");
-        String newsDesc = intent.getStringExtra("description");
+        String newsCreatedDate = intent.getStringExtra("createdDate");
+        String newsSectionName = intent.getStringExtra("section_name");
+        String newsDescription = intent.getStringExtra("description");
         String newsLink = intent.getStringExtra("news_link");
 
-
-        tvNewsTitle.setText(newsTitle);
-        tvNewsSectionName.setText(source);
-        tvNewsDate.setText(newsDate);
-        tvNewsDescription.setText(newsDesc);
+        newsDetailsBinding.setNewsTitle(newsTitle);
+        newsDetailsBinding.setNewsCreatedDate(newsCreatedDate);
+        newsDetailsBinding.setNewsSectionName(newsSectionName);
+        newsDetailsBinding.setNewsDescription(newsDescription);
 
         Picasso.with(NewsDetailsActivity.this).load(newsImageLink).into(ivNewsImage);
 
