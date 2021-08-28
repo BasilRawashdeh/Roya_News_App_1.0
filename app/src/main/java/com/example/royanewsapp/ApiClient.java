@@ -13,17 +13,17 @@ public class ApiClient {
     private static ApiClient apiClient;
     private static Retrofit retrofit;
     private static Volley volley;
-    private RequestQueue mQueue;
+   // private RequestQueue mQueue;
 
 
-    private ApiClient(Context context){
+    private ApiClient(){
         retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        mQueue = Volley.newRequestQueue(context);
+       // mQueue = Volley.newRequestQueue(context);
     }
 
     public static synchronized ApiClient getInstance(){
         if (apiClient == null){
-            apiClient = new ApiClient(MainActivity.mainActivityContext);
+            apiClient = new ApiClient();
         }
         return apiClient;
     }

@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.royanewsapp.databinding.NewsItemBinding;
@@ -16,16 +18,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
+public class NewsAdapter extends PagedListAdapter<NewsModel,NewsAdapter.NewsViewHolder> {
 
     Context context;
     List<NewsModel> newsModels = new ArrayList<>();
 
-    public NewsAdapter() {
-    }
 
     public NewsAdapter(Context context) {
+        super(DIFF_CALLBACK);
         this.context = context;
     }
 
@@ -61,6 +63,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         });
 
     }
+
+    //DiffUtil is a utility class that calculates the difference between two lists and outputs a list of update operations that converts the first list into the second one.
+    private static DiffUtil.ItemCallback<NewsModel> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<NewsModel>() {
+                @Override
+                public boolean areItemsTheSame(NewsModel oldItem, NewsModel newItem) {
+                    return oldItem.newsID == newItem.newsID;
+                }
+
+                @Override
+                public boolean areContentsTheSame(NewsModel oldItem, NewsModel newItem) {
+                    return oldItem.newsTitle.equals(newItem.newsTitle);
+                }
+            };
 
     @Override
     public int getItemCount() {
@@ -110,3 +126,4 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
      */
 }
+/**DiffUtil is a utility class that calculates the difference between two lists and outputs a list of update operations that converts the first list into the second one.*/
