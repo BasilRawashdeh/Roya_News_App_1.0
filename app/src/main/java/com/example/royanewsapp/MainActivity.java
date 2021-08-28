@@ -12,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,18 +22,22 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.royanewsapp.databinding.ActivityMainBinding;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class MainActivity extends AppCompatActivity {
 
     NewsViewModel newsViewModel;
 
     private RequestQueue mQueue;
-    public static final String API_URL = "https://beta.royanews.tv/api/section/get/1/info/1";
+    public static final String API_URL = "https://beta.royanews.tv/api/section/get/1/info/";
 
     ActivityMainBinding activityMainBinding;
 
@@ -40,9 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
     public String title = "أبرز ألعناوين !!";
 
+    int pageNum = 10;
+
+    public static Context mainActivityContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mainActivityContext = getApplicationContext();
 
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setContentView(activityMainBinding.getRoot());
@@ -50,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
         mQueue = Volley.newRequestQueue(this);
+
+        //requestData();
 
         // initialize swipeRefreshLayout to update the view with newest news.
         swipeRefreshLayout = findViewById(R.id.swipeRefresh);
@@ -73,20 +86,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 jsonParse();
+                //requestData();
             }
         });
     }
 
     private void jsonParse() {
-
         swipeRefreshLayout.setRefreshing(true);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, API_URL, null,
+        pageNum++;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, API_URL + pageNum, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray jsonArray = response.getJSONArray("section_info");
-                            swipeRefreshLayout.setRefreshing(false);
+                            Log.i("Volly onResponse","Json Array Response :-" + jsonArray);
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject newsJSONObject = jsonArray.getJSONObject(i);
@@ -108,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                                 newsViewModel.insertNews(new NewsModel(newsImageLink, newsTitle, newsSectionName, newsCreatedDate, newsLink, newsDescription));
 
                             }
+                            swipeRefreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -122,5 +137,49 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         mQueue.add(request);
+    }
+
+    private void requestData() {
+        Call<JSONObject> call;
+        call = ApiClient.getInstance().getApi().getInfo(1);
+
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, @NotNull retrofit2.Response<JSONObject> response) {
+                Log.i("MainActivity", "callBack Responded");
+                if (response.isSuccessful() && response.body() != null) {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    try {
+
+
+
+                        JSONArray pageNewsJSONArray = response.body().getJSONArray("section_info");
+                        Log.i("MainActivity", "callBack Responded response body=" + pageNewsJSONArray.get(0).toString());
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+/*
+                    RoyaApiResponse royaApiResponse = (JSONObject)response.body();
+                    Log.i("MainActivity", "callBack Responded response body=" + royaApiResponse.news_title);
+                    Toast.makeText(getApplicationContext(), "Retrofit-Response : " + response.body().toString().toString(), Toast.LENGTH_SHORT).show();
+
+ */
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "else Response : " + response.body(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                Log.i("MainActivity", "callBack failed to Respond");
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

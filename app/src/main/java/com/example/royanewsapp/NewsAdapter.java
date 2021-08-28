@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
@@ -69,7 +68,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     public void setNews(List<NewsModel> newsModels) {
-        newsModels.remove(0);
         this.newsModels = newsModels;
         notifyDataSetChanged();
     }
@@ -84,14 +82,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             super(newsItemBinding.getRoot());
 
             this.newsItemBinding = newsItemBinding;
-
             newsImageView = itemView.findViewById(R.id.ivNewsImage);
             cardView = itemView.findViewById(R.id.cardView);
-
         }
     }
 
-/*
+    /*
     public String dateTime(String t){
         PrettyTime prettyTime = new PrettyTime(new Locale(getCountry()));
         String time = null;
@@ -106,9 +102,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     }
 */
-    public String getCountry(){
+
+    /*public String getCountry(){
         Locale locale = Locale.getDefault();
         String country = locale.getCountry();
         return country.toLowerCase();
     }
+     */
 }
