@@ -1,4 +1,4 @@
-package com.example.royanewsapp;
+package com.example.royanewsapp.ViewModel;
 
 import android.app.Application;
 import android.util.Log;
@@ -13,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.royanewsapp.NewsModel;
 import com.example.royanewsapp.Model.NewsRepository;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,13 +45,17 @@ public class NewsViewModel extends AndroidViewModel {
 
     }
 
+    public void loadFirstPage() {
+        pageNum = 1;
+        fetchJson();
+    }
+
     public void loadNextPage() {
+        pageNum++;
         fetchJson();
     }
 
     private void fetchJson() {
-        //swipeRefreshLayout.setRefreshing(true);
-        pageNum++;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, API_URL + pageNum, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -79,7 +84,6 @@ public class NewsViewModel extends AndroidViewModel {
                                 insertNews(new NewsModel(newsImageLink, newsTitle, newsSectionName, newsCreatedDate, newsLink, newsDescription));
 
                             }
-                            //swipeRefreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -88,7 +92,6 @@ public class NewsViewModel extends AndroidViewModel {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //swipeRefreshLayout.setRefreshing(false);
                         error.printStackTrace();
                     }
                 });

@@ -1,4 +1,4 @@
-package com.example.royanewsapp;
+package com.example.royanewsapp.View;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +13,14 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.royanewsapp.NewsModel;
+import com.example.royanewsapp.NewsDetailsActivity;
+import com.example.royanewsapp.R;
 import com.example.royanewsapp.databinding.NewsItemBinding;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class NewsAdapter extends PagedListAdapter<NewsModel,NewsAdapter.NewsViewHolder> {
 
@@ -126,4 +128,3 @@ public class NewsAdapter extends PagedListAdapter<NewsModel,NewsAdapter.NewsView
     }
      */
 }
-/**DiffUtil is a utility class that calculates the difference between two lists and outputs a list of update operations that converts the first list into the second one.*/

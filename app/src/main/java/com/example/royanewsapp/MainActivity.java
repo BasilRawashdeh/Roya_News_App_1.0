@@ -14,26 +14,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.royanewsapp.View.NewsAdapter;
+import com.example.royanewsapp.ViewModel.NewsViewModel;
 import com.example.royanewsapp.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,11 +64,12 @@ public class MainActivity extends AppCompatActivity {
         newsRecyclerView.setLayoutManager(newsLayoutManager);
         newsRecyclerView.setHasFixedSize(true);
 
-
         final NewsAdapter newsAdapter = new NewsAdapter(MainActivity.this);
         newsRecyclerView.setAdapter(newsAdapter);
 
         newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
+
+        newsViewModel.loadFirstPage();
 
         //Observer on the liveData to notify onChange.
         newsViewModel.getAllNewsLiveData().observe(this, new Observer<List<NewsModel>>() {
@@ -141,54 +132,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fetchJson();
-    }
-
-    private void fetchJson() {
-        swipeRefreshLayout.setRefreshing(true);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, API_URL + pageNum, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("section_info");
-                            Log.i("Volly onResponse","Json Array Response :-" + jsonArray);
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject newsJSONObject = jsonArray.getJSONObject(i);
-
-                                String newsTitle = newsJSONObject.getString("news_title");
-                                String newsImageLink = newsJSONObject.getString("imageLink");
-                                String newsCreatedDate = newsJSONObject.getString("createdDate");
-                                String newsSectionName = newsJSONObject.getString("section_name");
-                                String newsDescription = newsJSONObject.getJSONObject("section").getString("description");
-                                String newsLink = newsJSONObject.getString("news_link");
-
-                                Log.i("News Model" + i + ":=", newsTitle);
-                                Log.i("News Model" + i + ":=", newsSectionName);
-                                Log.i("News Model" + i + ":=", newsImageLink);
-                                Log.i("News Model" + i + ":=", newsCreatedDate);
-                                Log.i("News Model" + i + ":=", newsDescription);
-                                Log.i("News Model" + i + ":=", newsLink);
-
-                                newsViewModel.insertNews(new NewsModel(newsImageLink, newsTitle, newsSectionName, newsCreatedDate, newsLink, newsDescription));
-
-                            }
-                            swipeRefreshLayout.setRefreshing(false);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        swipeRefreshLayout.setRefreshing(false);
-                        error.printStackTrace();
-                    }
-                });
-
-        mQueue.add(request);
     }
 
     @Override
